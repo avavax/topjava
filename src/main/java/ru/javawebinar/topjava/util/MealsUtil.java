@@ -13,6 +13,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class MealsUtil {
+
+    public static final int CALORIES_TEST = 2050;
+
     public static void main(String[] args) {
         List<Meal> meals = createMealTestData();
         List<MealTo> mealsTo = filteredByStreams(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000);
@@ -31,13 +34,6 @@ public class MealsUtil {
         );
     }
 
-    public static List<MealTo> createMealToTestData() {
-        LocalTime startTime = LocalTime.of(0, 0);
-        LocalTime endTime = LocalTime.of(23, 59);
-        int caloriesPerDay = 2050;
-        return filteredByStreams(MealsUtil.createMealTestData(), startTime, endTime, caloriesPerDay);
-    }
-
     public static List<MealTo> filteredByStreams(List<Meal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
         Map<LocalDate, Integer> caloriesSumByDate = meals.stream()
                 .collect(
@@ -50,7 +46,7 @@ public class MealsUtil {
                 .collect(Collectors.toList());
     }
 
-    private static MealTo createTo(Meal meal, boolean excess) {
-        return new MealTo(meal.getDateTime(), meal.getDescription(), meal.getCalories(), excess);
+    public static MealTo createTo(Meal meal, boolean excess) {
+        return new MealTo(meal.getUuid(), meal.getDateTime(), meal.getDescription(), meal.getCalories(), excess);
     }
 }

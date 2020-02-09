@@ -3,13 +3,10 @@
 <%@ page import="ru.javawebinar.topjava.util.TimeUtil" %>
 <html>
 <head>
-    <title>Meals</title>
+    <title>Моя еда</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-</head>
-<head>
-    <title>Моя еда</title>
 </head>
 <body>
     <div class="container">
@@ -27,15 +24,17 @@
             </tr>
             </thead>
             <c:forEach var="meal" items="${meals}">
-                <tr style="color: <c:out value="${meal.isExcess() ? 'green' : 'red'}" />">
+                <tr style="color: <c:out value="${meal.isExcess() ? 'red' : 'green'}" />">
                     <td>${TimeUtil.formatDateTime(meal.getDateTime())}</td>
                     <td>${meal.getDescription()}</td>
                     <td>${meal.getCalories()}</td>
-                    <td>Удалить</td>
-                    <td>Править</td>
+                    <td><a href="meals?action=delete&mealId=<c:out value="${meal.getUuid()}"/>">Удалить</a></td>
+                    <td><a href="meals?action=edit&mealId=<c:out value="${meal.getUuid()}"/>">Править</a></td>
                 </tr>
             </c:forEach>
         </table>
+        <a href="meals?action=insert" class="btn btn-primary mb-2">Добавить еду</a>
     </div>
 </body>
 </html>
+
