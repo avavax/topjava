@@ -8,37 +8,36 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class MealDAO implements DAO {
 
-    protected ConcurrentMap<String, Meal> meals;
+    protected ConcurrentMap<Integer, Meal> meals;
+    protected AtomicInteger maxUuid = new AtomicInteger();
 
     public MealDAO() {
         meals = MealsUtil.createMealTestData().stream()
                 .collect(Collectors.toConcurrentMap(
                         Meal::getUuid,
                         Function.identity()));
-    }
-
-    @Override
-    public void clear() {
-        meals.clear();
+        maxUuid.set(meals.size());
     }
 
     @Override
     public void save(Meal meal) {
-        meals.put(meal.getUuid(), meal);
+        int uuid = maxUuid.incrementAndGet();
+        meals.put(uuid, new Meal(uuid, meal.getDateTime(), meal.getDescription(), meal.getCalories()));
     }
 
     @Override
-    public Meal getById(String uuid) {
+    public Meal getById(int uuid) {
         return meals.get(uuid);
     }
 
     @Override
-    public void delete(String uuid) {
+    public void delete(int uuid) {
         meals.remove(uuid);
     }
 
@@ -52,10 +51,5 @@ public class MealDAO implements DAO {
         List<Meal> list = new ArrayList<>(meals.values());
         list.sort(Comparator.comparing(Meal::getDateTime));
         return list;
-    }
-
-    @Override
-    public int size() {
-        return meals.size();
     }
 }

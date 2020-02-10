@@ -11,9 +11,9 @@ public class MealTo {
 
     private final boolean excess;
 
-    private final String uuid;
+    private final int uuid;
 
-    public MealTo(String uuid, LocalDateTime dateTime, String description, int calories, boolean excess) {
+    public MealTo(int uuid, LocalDateTime dateTime, String description, int calories, boolean excess) {
         this.uuid = uuid;
         this.dateTime = dateTime;
         this.description = description;
@@ -37,7 +37,7 @@ public class MealTo {
         return excess;
     }
 
-    public String getUuid() {
+    public int getUuid() {
         return uuid;
     }
 
