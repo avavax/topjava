@@ -32,17 +32,17 @@ public class InMemoryMealRepository implements MealRepository {
 
     @Override
     public Meal save(Meal meal, Integer userId) {
-        if (!userId.equals(meal.getUserId())) {
-            return null;
-        }
+        log.info("save {} {}", userId, meal);
         if (meal.isNew()) {
             meal.setId(counter.incrementAndGet());
             repository.put(meal.getId(), meal);
-            log.info("save {}", meal);
             return meal;
         }
         // handle case: update, but not present in storage
-        return repository.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
+        if (getAll(userId).stream().anyMatch(m -> m.getId().equals(meal.getId()))) {
+            return repository.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
+        }
+        return null;
     }
 
     @Override
@@ -75,8 +75,8 @@ public class InMemoryMealRepository implements MealRepository {
 
     public List<Meal> getFiltered(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime, Integer userId) {
         log.info("getFiltered userId {}", userId);
-        return getAll(userId).stream()
-                .filter(meal -> isBetweenDateAndTime(meal.getDateTime(), startDate, endDate, startTime, endTime))
+        return repository.values().stream()
+                .filter(meal -> userId.equals(meal.getUserId()) && isBetweenDateAndTime(meal.getDateTime(), startDate, endDate, startTime, endTime))
                 .collect(Collectors.toList());
     }
 }

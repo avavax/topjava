@@ -23,11 +23,7 @@ public class MealService {
     }
 
     public Meal create(Meal meal, Integer userId) {
-        Meal newMeal = repository.save(meal, userId);
-        if (newMeal == null) {
-            throw new NotFoundException("Create error");
-        }
-        return newMeal;
+        return repository.save(meal, userId);
     }
 
     public void delete(int id, Integer userId) {

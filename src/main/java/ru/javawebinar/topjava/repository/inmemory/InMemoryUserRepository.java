@@ -52,7 +52,7 @@ public class InMemoryUserRepository implements UserRepository {
     public List<User> getAll() {
         log.info("getAll");
         List<User> list = new ArrayList<>(repository.values());
-        list.sort(Comparator.comparing(User::getName));
+        list.sort(Comparator.comparing(User::getName).thenComparing(User::getEmail));
         return list;
     }
 
@@ -61,6 +61,8 @@ public class InMemoryUserRepository implements UserRepository {
         log.info("getByEmail {}", email);
         return repository.values().stream()
                 .filter(u -> email.equals(u.getEmail()))
-                .collect(Collectors.toList()).get(0);
+                .findAny().orElse(null);
     }
 }
+
+

@@ -23,8 +23,7 @@ public class DateTimeUtil {
                                                LocalTime endTime) {
         LocalDate ld = ldt.toLocalDate();
         LocalTime lt = ldt.toLocalTime();
-        return ld.compareTo(startDate) >= 0 && ld.compareTo(endDate) <= 0
-                && lt.compareTo(startTime) >= 0 && lt.compareTo(endTime) <= 0;
+        return ld.compareTo(startDate) >= 0 && ld.compareTo(endDate) <= 0 && isBetweenInclusive(lt, startTime, endTime);
 
     }
 }
