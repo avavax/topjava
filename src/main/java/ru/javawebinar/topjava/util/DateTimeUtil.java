@@ -12,6 +12,10 @@ public class DateTimeUtil {
         return lt.compareTo(startTime) >= 0 && lt.compareTo(endTime) <= 0;
     }
 
+    private static boolean isBetweenDate(LocalDate ld, LocalDate startDate, LocalDate endDate) {
+        return ld.compareTo(startDate) >= 0 && ld.compareTo(endDate) <= 0;
+    }
+
     public static String toString(LocalDateTime ldt) {
         return ldt == null ? "" : ldt.format(DATE_TIME_FORMATTER);
     }
@@ -23,7 +27,7 @@ public class DateTimeUtil {
                                                LocalTime endTime) {
         LocalDate ld = ldt.toLocalDate();
         LocalTime lt = ldt.toLocalTime();
-        return ld.compareTo(startDate) >= 0 && ld.compareTo(endDate) <= 0 && isBetweenInclusive(lt, startTime, endTime);
+        return isBetweenDate(ld, startDate, endDate) && isBetweenInclusive(lt, startTime, endTime);
 
     }
 }

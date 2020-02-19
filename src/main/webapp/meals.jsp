@@ -49,6 +49,29 @@
             </tr>
         </c:forEach>
     </table>
+
+    <br><br>
+
+    <form method="GET" action="meals">
+        <dl>
+            <dt>StartDate:</dt>
+            <dd><input type="date" value="${startDate}" name="startDate"></dd>
+        </dl>
+        <dl>
+            <dt>EndDate:</dt>
+            <dd><input type="date" value="${endDate}" name="endDate"></dd>
+        </dl>
+        <dl>
+            <dt>StartTime:</dt>
+            <dd><input type="time" value="${startTime}" name="startTime"></dd>
+        </dl>
+        <dl>
+            <dt>EndTime:</dt>
+            <dd><input type="time" value="${endTime}" name="endTime"></dd>
+        </dl>
+        <button type="submit">Filter</button>
+    </form>
+
 </section>
 </body>
 </html>

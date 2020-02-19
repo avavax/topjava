@@ -14,7 +14,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
@@ -22,13 +24,20 @@ import java.util.Objects;
 public class MealServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(MealServlet.class);
 
-    private ConfigurableApplicationContext appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml");
+    private ConfigurableApplicationContext appCtx;
     private MealRestController mealRestController;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
+        appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml");
         mealRestController = appCtx.getBean(MealRestController.class);
+    }
+
+    @Override
+    public void destroy() {
+        appCtx.close();
+        super.destroy();
     }
 
     @Override
@@ -73,8 +82,26 @@ public class MealServlet extends HttpServlet {
             case "all":
             default:
                 log.info("getAll");
-                List<MealTo> meals = mealRestController.getAll();
-                request.setAttribute("meals", meals);
+
+                String startDate = request.getParameter("startDate");
+                String endDate = request.getParameter("endDate");
+                String startTime = request.getParameter("startTime");
+                String endTime = request.getParameter("endTime");
+
+                if (startDate == null) {
+                    request.setAttribute("meals", mealRestController.getAll());
+                } else {
+                    request.setAttribute("meals", mealRestController.getFiltered(
+                            LocalDate.parse(startDate),
+                            LocalDate.parse(endDate),
+                            LocalTime.parse(startTime),
+                            LocalTime.parse(endTime)));
+                    request.setAttribute("startDate", startDate);
+                    request.setAttribute("endDate", endDate);
+                    request.setAttribute("startTime", startTime);
+                    request.setAttribute("endTime", endTime);
+                }
+
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;
         }

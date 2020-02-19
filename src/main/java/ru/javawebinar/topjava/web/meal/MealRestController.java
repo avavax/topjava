@@ -39,8 +39,8 @@ public class MealRestController {
         return service.get(id, SecurityUtil.authUserId());
     }
 
-    public List<MealTo> getFiltered(int id, LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
-        log.info("getFiltered {}", id);
+    public List<MealTo> getFiltered(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
+        log.info("getFiltered {} {} {} {}", startDate, endDate, startTime, endTime);
         return MealsUtil.getTos(
                 service.getFiltered(startDate, endDate, startTime, endTime, SecurityUtil.authUserId()),
                 DEFAULT_CALORIES_PER_DAY);
